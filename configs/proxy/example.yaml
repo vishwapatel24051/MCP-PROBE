@@ -1,0 +1,25 @@
+# Proxy config. One proxy per upstream server; the three Experiment 3
+# conditions differ ONLY in the `detector` block.
+#
+#   uv run python -m proxy --config configs/proxy/example.yaml --run-id <run>
+
+run_id: null            # null -> timestamp; --run-id on the command line wins
+
+upstream:
+  name: toy             # used in log file names and log lines
+  command: uv
+  args: [run, python, tests/fixtures/toy_server.py]
+  env: {}               # extra env vars for the upstream process
+  cwd: null
+
+detector:
+  # Dotted path to any class with `name` and `filter_tools(tools) -> tools`.
+  # No detector:   proxy.detector_slot:NoDetector   (also the default if this block is omitted)
+  # MCP-Guard:     detectors.<module>:<Class>       (not built yet)
+  # MCP Guardian:  detectors.<module>:<Class>       (not built yet)
+  class: proxy.detector_slot:NoDetector
+  params: {}            # passed to the class as keyword arguments
+  timeout_s: null       # null = no timeout; a timeout counts as a detector error
+  on_error: raise       # raise | fail_open | fail_closed
+
+log_dir: results/proxy_logs
