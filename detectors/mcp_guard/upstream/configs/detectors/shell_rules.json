@@ -1,0 +1,137 @@
+{
+    "threshold": 2.5,
+    "shell_rules": [
+        {
+            "id": "BACKTICK_EXEC",
+            "pattern": "`[^`]+`",
+            "score": 4,
+            "flags": "s"
+        },
+        {
+            "id": "DOLLAR_PAREN",
+            "pattern": "\\$\\([^\\)]+\\)",
+            "score": 4,
+            "flags": "s"
+        },
+        {
+            "id": "CURL_WGET_PIPE_SH",
+            "pattern": "(?is)(curl|wget)[^\\n]*\\|\\s*(sh|bash)",
+            "score": 5,
+            "flags": "is"
+        },
+        {
+            "id": "CHAIN_AND",
+            "pattern": "&&",
+            "score": 1,
+            "flags": ""
+        },
+        {
+            "id": "CHAIN_OR",
+            "pattern": "\\|\\|",
+            "score": 1,
+            "flags": ""
+        },
+        {
+            "id": "SEMICOLON",
+            "pattern": "(?<!\\\\);",
+            "score": 0.5,
+            "flags": ""
+        },
+        {
+            "id": "PIPE",
+            "pattern": "(?<!\\\\)\\|",
+            "score": 0.5,
+            "flags": ""
+        },
+        {
+            "id": "AMP",
+            "pattern": "(?<!\\\\)&(?!=&)",
+            "score": 0.5,
+            "flags": ""
+        },
+        {
+            "id": "COMMON_CMDS",
+            "pattern": "(?i)\\b(cat\\s+/etc/passwd|rm\\s+-rf|ls\\s+-la|wget\\s+http|curl\\s+http|bash\\s+-c|sh\\s+-c|nc\\s+-e|python\\s+-c|perl\\s+-e|php\\s+-r|awk\\s+'{print|sed\\s+'s/|find\\s+/\\s+-exec|xargs\\s+-I|chmod\\s+777|chown\\s+root|scp\\s+file|ssh\\s+user|id\\s+-u|whoami|pwd|type\\s+file|dir\\s+/s|format\\s+c:|netstat\\s+-an|ipconfig\\s+/all|ping\\s+-c|nslookup\\s+domain|systeminfo|uname\\s+-a|sleep\\s+\\\\d+|timeout\\s+\\\\d+|exec\\s+cmd|eval\\s+\\$|system\\s+\\(|phpinfo\\s*\\(\\))\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "NEWLINE_CMD",
+            "pattern": "(?is)(?:\\n|%0A|%0a)\\s*(cat\\s+/etc/passwd|rm\\s+-rf|ls\\s+-la|wget\\s+http|curl\\s+http|bash\\s+-c|sh\\s+-c|nc\\s+-e|python\\s+-c|perl\\s+-e|php\\s+-r|awk\\s+'{print|sed\\s+'s/|find\\s+/\\s+-exec|xargs\\s+-I|chmod\\s+777|chown\\s+root|scp\\s+file|ssh\\s+user|id\\s+-u|whoami|pwd|type\\s+file|dir\\s+/s|format\\s+c:|netstat\\s+-an|ipconfig\\s+/all|ping\\s+-c|nslookup\\s+domain|systeminfo|uname\\s+-a|sleep\\s+\\\\d+|timeout\\s+\\\\d+|exec\\s+cmd|eval\\s+\\$|system\\s+\\(|phpinfo\\s*\\(\\))\\b",
+            "score": 4,
+            "flags": "is"
+        },
+        {
+            "id": "REDIRECT",
+            "pattern": ">(?:\\s*/\\w+|[^\\n]*)|2>\\s*&1",
+            "score": 1,
+            "flags": "i"
+        },
+        {
+            "id": "HEREDOC",
+            "pattern": "<<\\s*EOF",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "ENV_IFS",
+            "pattern": "\\$IFS",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "ENV_VAR_SUB",
+            "pattern": "\\$\\{[^}]+\\}",
+            "score": 1,
+            "flags": "s"
+        },
+        {
+            "id": "NC_REVERSE",
+            "pattern": "(?is)(nc|netcat)[^\\n]*(?:-e|-c)\\s*(/bin/sh|/bin/bash|cmd\\.exe)",
+            "score": 5,
+            "flags": "is"
+        },
+        {
+            "id": "RM_RISK",
+            "pattern": "(?i)\\brm\\s+-r[f]?\\s+/",
+            "score": 3,
+            "flags": "i"
+        },
+        {
+            "id": "WIN_SYS_CMDS",
+            "pattern": "(?i)\\b(type\\s+password|dir\\s+/s|format\\s+c:|netstat\\s+-an|ipconfig\\s+/all|ping\\s+-t|nslookup\\s+malicious|systeminfo|reg\\s+add|netsh\\s+firewall|net\\s+user\\s+add|net\\s+localgroup\\s+administrators)\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "PHP_DANGER_FUNCS",
+            "pattern": "(?i)\\b(exec\\s*\\(|eval\\s*\\(|system\\s*\\(|phpinfo\\s*\\(|shell_exec\\s*\\(|passthru\\s*\\(|popen\\s*\\(|proc_open\\s*\\()\\b",
+            "score": 3,
+            "flags": "i"
+        },
+        {
+            "id": "URL_ENCODED_NEWLINE",
+            "pattern": "%0A|%0a",
+            "score": 1,
+            "flags": "i"
+        },
+        {
+            "id": "TEMPLATE_INJECTION",
+            "pattern": "\\{\\{[^}]+\\}\\}|\\{%[^%]+%\\}",
+            "score": 2,
+            "flags": "s"
+        },
+        {
+            "id": "POWERSHELL_CMD",
+            "pattern": "(?i)powershell\\s+-command\\s+",
+            "score": 3,
+            "flags": "i"
+        },
+        {
+            "id": "SENSITIVE_PATH",
+            "pattern": "(?i)(C:\\\\Windows\\\\System32|C:\\\\WINNT\\\\System32|/etc/passwd|/etc/shadow|/var/log|/tmp/.*malicious|/home/.*attack|/root/.*exploit|%SYSTEMROOT%\\\\System32)",
+            "score": 2,
+            "flags": "i"
+        }
+    ]
+}

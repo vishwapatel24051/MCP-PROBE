@@ -1,0 +1,7 @@
+{
+  "suspicious_params": [
+    "note", "notes", "feedback", "details", "extra", "additional",
+    "metadata", "debug", "sidenote", "context", "annotation",
+    "reasoning", "remark"
+  ]
+} 

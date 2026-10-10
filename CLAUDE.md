@@ -29,11 +29,10 @@ Likely release: github.com/zhiqiangwang4/MCPTox-Benchmark (not yet confirmed; sc
 ## Rules
 
 - **Never read held-out examples.** Category names and counts are fine.
-- **We train no models.** "Tuning" means adjusting prompts, rules and thresholds.
 - **Work only on the area the user names** (e.g., proxy, MCP-Guard, data split). If a change would affect another area or anything shared, say so instead of making it.
 - **Don't invent facts about papers.** Cite the arXiv ID, and mark anything unverified.
 - **Do not add claude as a contributor in any github push.**
 
 ## Out of scope
 
-Rug pulls, server-code bugs, injection through tool outputs, tool squatting, building a new detector, fine-tuning.
+Rug pulls, server-code bugs, injection through tool outputs, tool squatting, building a new detector.

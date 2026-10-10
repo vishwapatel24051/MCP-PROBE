@@ -1,0 +1,33 @@
+# MCP-Guard (arXiv 2508.10991) as wrapped in detectors/mcp_guard/.
+# Tunable on tune/val only (prompts, rules, thresholds); no training.
+
+# paper    = Sec. 3.2-3.3 / Eq. 2: only Stage II scores in `band` go to the LLM.
+# released = what GenTelLab/MCP-Guard@4bc9779 actually does: every case Stage II passes goes to the LLM.
+mode: paper
+stages: [s1, s2, s3]
+
+tu: 0.45                 # neural threshold T_u: block iff P(malicious) > tu (paper Eq. 2, "e.g. 0.45")
+band: [0.45, 0.55]       # paper mode: ambiguous Stage II scores sent to Stage III
+released_s2_threshold: 0.5  # released mode: Stage II blocks at P >= 0.5 (upstream default)
+
+stage1:
+  # All seven upstream detectors, in upstream's order. Remove names to ablate.
+  detectors: [prompt_injection, sensitive_file, shell_injection, sql_injection, shadow_hijack, cross_origin, important_tag]
+
+stage2:
+  loader: hf             # hf (batched, verified == upstream onnx2pytorch to ~3e-6 logits) | onnx2pytorch
+  tokenizer: bert        # bert (what upstream uses; reproduces the paper) | checkpoint_xlmr
+  device: auto           # auto -> cuda if available else cpu
+  batch_size: 32
+
+stage3:
+  # Any OpenAI-compatible chat endpoint: OpenAI, vLLM on CARC, Ollama (/v1).
+  model: gpt-4o-mini     # paper's headline arbiter (Table 4a)
+  base_url: https://api.openai.com/v1
+  api_key_env: OPENAI_API_KEY   # read from the environment / .env
+  prompt: upstream       # upstream (released system prompt) | paper (Box 1)
+  temperature: 0.1       # upstream's GPT setting; the paper reports 0.7 for its runs (Sec. 5.2)
+  max_tokens: 10
+
+# Stage II scores and Stage III verdicts are cached here (results/ is gitignored).
+cache_path: results/mcp_guard/cache.sqlite

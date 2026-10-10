@@ -1,0 +1,155 @@
+{
+  "threshold": 4.0,
+  "shadow_rules": [
+    {
+      "id": "SHADOW_ATTACK",
+      "pattern": "(?i)\\b(?:shadow\\s+hijack|hijack\\s+attack|override\\s+tool|replace\\s+function)\\b",
+      "score": 3,
+      "description": "Explicit shadow attack keyword combinations"
+    },
+    {
+      "id": "TOOL_OVERRIDE",
+      "pattern": "(?i)\\b(?:tool\\s+override|function\\s+override|method\\s+override|replace\\s+the\\s+tool)\\b",
+      "score": 3,
+      "description": "Explicit tool override patterns"
+    },
+    {
+      "id": "BEFORE_CALLING",
+      "pattern": "(?i)\\b(?:before\\s+calling\\s+the\\s+tool|before\\s+using\\s+the\\s+function|before\\s+executing\\s+the\\s+command)\\b",
+      "score": 2.5,
+      "description": "Explicit pre-call operations"
+    },
+    {
+      "id": "AFTER_CALLING",
+      "pattern": "(?i)\\b(?:after\\s+calling\\s+the\\s+tool|after\\s+using\\s+the\\s+function|after\\s+executing\\s+the\\s+command)\\b",
+      "score": 2.5,
+      "description": "Explicit post-call operations"
+    },
+    {
+      "id": "INSTEAD_OF",
+      "pattern": "(?i)\\b(?:instead\\s+of|replace\\s+with|substitute\\s+with)\\b",
+      "score": 2,
+      "description": "Instead of patterns"
+    },
+    {
+      "id": "MALICIOUS_REDIRECT",
+      "pattern": "(?i)\\b(?:redirect|forward|proxy|tunnel|exfiltrate|leak)\\b",
+      "score": 2,
+      "description": "Malicious redirect patterns"
+    },
+    {
+      "id": "SYSTEM_ACCESS",
+      "pattern": "(?i)\\b(?:system\\s+command|exec\\s+shell|shell\\s+command|command\\s+execution|cat\\s+/etc/passwd|rm\\s+-rf|ls\\s+-la|wget\\s+malicious|curl\\s+attacker|nc\\s+-e|python\\s+-c|perl\\s+-e|php\\s+-r|bash\\s+-c|sh\\s+-c)\\b",
+      "score": 2.5,
+      "description": "Explicit system access commands"
+    },
+    {
+      "id": "FILE_ACCESS",
+      "pattern": "(?i)\\b(?:read\\s+/etc/passwd|write\\s+/etc/shadow|delete\\s+system\\s+file|modify\\s+config\\s+file|access\\s+credentials|steal\\s+key|extract\\s+token|capture\\s+secret)\\b",
+      "score": 2.5,
+      "description": "Explicit sensitive file access"
+    },
+    {
+      "id": "NETWORK_ACCESS",
+      "pattern": "(?i)\\b(?:network\\s+attack|socket\\s+exploit|http\\s+injection|tcp\\s+attack|udp\\s+flood|api\\s+exploit|endpoint\\s+hack|url\\s+injection|host\\s+attack|server\\s+exploit)\\b",
+      "score": 2,
+      "description": "Explicit network attack patterns"
+    },
+    {
+      "id": "PRIVILEGE_ESCALATION",
+      "pattern": "(?i)\\b(?:privilege|escalation|admin|root|sudo|superadmin|elevate)\\b",
+      "score": 2,
+      "description": "Privilege escalation patterns"
+    },
+    {
+      "id": "SQL_INJECTION",
+      "pattern": "(?i)\\b(?:union\\s+select|drop\\s+table|insert\\s+into|update\\s+set|delete\\s+from|or\\s+1=1|'\\s*or\\s*'1'='1)\\b",
+      "score": 2,
+      "description": "SQL injection patterns"
+    },
+    {
+      "id": "XSS_SCRIPT",
+      "pattern": "(?i)<script[^>]*>|javascript:|on\\w+\\s*=|fetch\\(|document\\.cookie|alert\\(|eval\\(|innerHTML",
+      "score": 2,
+      "description": "XSS script patterns"
+    },
+    {
+      "id": "MALICIOUS_URL",
+      "pattern": "(?i)https?://[^\\s]*malicious[^\\s]*|https?://[^\\s]*attacker[^\\s]*|https?://[^\\s]*steal[^\\s]*",
+      "score": 2,
+      "description": "Malicious URL patterns"
+    },
+    {
+      "id": "SILENT_OPERATION",
+      "pattern": "(?i)\\b(?:silently|silent|suppress|hide|mask|covert|stealth|invisible|no\\s+traces|no\\s+logs)\\b",
+      "score": 1.5,
+      "description": "Silent operation patterns"
+    },
+    {
+      "id": "DATA_EXFILTRATION",
+      "pattern": "(?i)\\b(?:exfiltrate\\s+data|leak\\s+information|steal\\s+credentials|capture\\s+session|extract\\s+secrets|harvest\\s+data|collect\\s+passwords|gather\\s+intel|dump\\s+database|export\\s+secrets)\\b",
+      "score": 3,
+      "description": "Explicit data exfiltration"
+    },
+    {
+      "id": "UNAUTHORIZED_ACCESS",
+      "pattern": "(?i)\\b(?:unauthorized|bypass|skip|ignore|disable|force|override|stolen|fake|invalid)\\b",
+      "score": 1.5,
+      "description": "Unauthorized access patterns"
+    },
+    {
+      "id": "CRITICAL_OPERATIONS",
+      "pattern": "(?i)\\b(?:delete|remove|drop|terminate|kill|stop|destroy|wipe|format|reset)\\b",
+      "score": 1.5,
+      "description": "Critical operations patterns"
+    },
+    {
+      "id": "SENSITIVE_DATA",
+      "pattern": "(?i)\\b(?:password|credential|private\\s+key|secret|token|api\\s+key|session|cookie|auth|login)\\b",
+      "score": 1.5,
+      "description": "Sensitive data patterns"
+    },
+    {
+      "id": "MALICIOUS_PARAMETERS",
+      "pattern": "(?i)\\b(?:malicious|attacker|fake|spoof|forge|inject|payload|exploit|vulnerable|compromise)\\b",
+      "score": 1.5,
+      "description": "Malicious parameters patterns"
+    },
+    {
+      "id": "PATH_TRAVERSAL",
+      "pattern": "(?i)\\.\\./|/etc/|/var/|/tmp/|/home/|/root/|C:\\\\|Windows\\\\|System32\\\\",
+      "score": 1.5,
+      "description": "Path traversal patterns"
+    },
+    {
+      "id": "WILDCARD_EXPANSION",
+      "pattern": "(?i)\\*|\\?|%|all|every|wildcard|expand|enumerate|iterate|loop",
+      "score": 1,
+      "description": "Wildcard expansion patterns"
+    },
+    {
+      "id": "BATCH_OPERATIONS",
+      "pattern": "(?i)\\b(?:batch|mass|bulk|all|every|multiple|repeat|loop|iterate|recursive)\\b",
+      "score": 1,
+      "description": "Batch operations patterns"
+    },
+    {
+      "id": "HIDDEN_OPERATIONS",
+      "pattern": "(?i)\\b(?:hidden|background|covert|secret|masked|disguised|camouflaged|obfuscated)\\b",
+      "score": 1.5,
+      "description": "Hidden operations patterns"
+    },
+    {
+      "id": "MALICIOUS_GOAL",
+      "pattern": "(?i)\\b(?:goal\\s+is\\s+to|objective\\s+is\\s+to|purpose\\s+is\\s+to|aim\\s+is\\s+to)\\b",
+      "score": 1,
+      "description": "Malicious goal patterns"
+    },
+    {
+      "id": "BEHAVIOR_INVISIBLE",
+      "pattern": "(?i)\\b(?:behaviour\\s+must\\s+remain\\s+invisible|must\\s+remain\\s+invisible|invisible\\s+to\\s+users)\\b",
+      "score": 2,
+      "description": "Behavior invisible patterns"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "ignore_previous_001",
+      "type": "ignore_previous",
+      "pattern": "ignore\\s+(?:all\\s+)?(?:previous\\s+)?(?:instructions?|prompts?)",
+      "severity": "high",
+      "description": "Detect hidden instructions that ignore previous prompts",
+      "enabled": true
+    },
+    {
+      "id": "role_switch_001",
+      "type": "role_switch",
+      "pattern": "you\\s+are\\s+now\\s+(?:a\\s+)?(?:different\\s+)?(?:ai|assistant|bot)",
+      "severity": "high",
+      "description": "Detect hidden role-switch instructions",
+      "enabled": true
+    },
+    {
+      "id": "system_override_001",
+      "type": "system_override",
+      "pattern": "system\\s+prompt",
+      "severity": "critical",
+      "description": "Detect system prompt overrides",
+      "enabled": true
+    },
+    {
+      "id": "output_control_001",
+      "type": "output_control",
+      "pattern": "output\\s+(?:only|just)\\s+",
+      "severity": "medium",
+      "description": "Detect output control instructions",
+      "enabled": true
+    },
+    {
+      "id": "hidden_tags_001",
+      "type": "hidden_tags",
+      "pattern": "<hidden>.*?</hidden>",
+      "severity": "medium",
+      "description": "Detect hidden tags",
+      "enabled": true
+    },
+    {
+      "id": "encoded_content_001",
+      "type": "encoded_content",
+      "pattern": "base64:\\s*[A-Za-z0-9+/=]+",
+      "severity": "high",
+      "description": "Detect Base64-encoded content",
+      "enabled": true
+    },
+    {
+      "id": "multilingual_001",
+      "type": "multilingual",
+      "pattern": "[\\u4e00-\\u9fff].*?(?:忽略|忘记|无视|重新开始|新指令)",
+      "severity": "high",
+      "description": "Detect hidden Chinese-language instructions",
+      "enabled": true
+    },
+    {
+      "id": "special_chars_001",
+      "type": "special_chars",
+      "pattern": "[\\u200b-\\u200f\\u2028-\\u202f\\u2060-\\u2064\\u206a-\\u206f]",
+      "severity": "medium",
+      "description": "Detect zero-width characters",
+      "enabled": true
+    }
+  ]
+}

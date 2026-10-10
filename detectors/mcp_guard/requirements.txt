@@ -1,0 +1,15 @@
+# MCP-Guard extras, kept out of the shared pyproject.toml until the team agrees to add them.
+# Install into the uv env:  uv pip install -r detectors/mcp_guard/requirements.txt
+# Versions follow GenTelLab/MCP-Guard's environment.yml where they matter for loading the checkpoint.
+torch==2.8.0
+transformers==4.53.3
+sentencepiece==0.2.1
+protobuf>=5,<7
+onnx==1.19.0
+onnx2pytorch==0.5.1
+huggingface_hub>=0.34,<1.0
+pydantic>=2.7,<3
+fastapi==0.115.13  # upstream exceptions.py imports fastapi.HTTPException
+requests>=2.32
+python-dotenv>=1.0
+numpy>=1.26,<3

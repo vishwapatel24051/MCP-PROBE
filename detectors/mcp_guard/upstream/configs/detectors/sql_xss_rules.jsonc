@@ -1,0 +1,316 @@
+{
+    // Global threshold: total score >= threshold => high risk
+    "threshold": 3,
+    "sql_rules": [
+        {
+            "id": "UNION_SELECT",
+            "pattern": "(?i)\\bunion\\s+select\\b",
+            "score": 3,
+            "flags": "i"
+        },
+        {
+            "id": "SELECT_FROM",
+            "pattern": "(?i)\\bselect\\b\\s+[^;]+\\bfrom\\b\\s+[^;]+(?:where|group|order|limit|union)",
+            "score": 2,
+            "flags": "is"
+        },
+        {
+            "id": "BOOLEAN_TAUTOLOGY",
+            "pattern": "(?i)\\b(?:or|and)\\b\\s*['\"]?\\d+['\"]?\\s*=\\s*['\"]?\\d+['\"]?",
+            "score": 2,
+            "flags": "i"
+        },
+        // Bulk/dangerous operations
+        {
+            "id": "DDL_DROP_TRUNCATE",
+            "pattern": "(?i)\\b(drop|truncate|alter|create)\\s+(table|database|user)\\b",
+            "score": 3,
+            "flags": "i"
+        },
+        {
+            "id": "DML_UPDATE_SET",
+            "pattern": "(?i)\\bupdate\\b\\s+\\w+\\s+set\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "DML_DELETE_FROM",
+            "pattern": "(?i)\\bdelete\\b\\s+from\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "INSERT_INTO",
+            "pattern": "(?i)\\binsert\\b\\s+into\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        // Time/resource consumption injections
+        {
+            "id": "SLEEP_FUNC",
+            "pattern": "(?i)\\b(?:sleep|benchmark)\\s*\\(\\s*\\d+",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "WAITFOR_DELAY",
+            "pattern": "(?i)\\bwaitfor\\s+delay\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        // System-sensitive info/functions
+        {
+            "id": "INFO_SCHEMA",
+            "pattern": "(?i)\\binformation_schema\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        {
+            "id": "SYSTEM_FUNCS",
+            "pattern": "(?i)@@version|@@identity|@@rowcount|@@error",
+            "score": 1,
+            "flags": "i"
+        },
+        {
+            "id": "LOAD_FILE",
+            "pattern": "(?i)\\bload_file\\s*\\(",
+            "score": 2,
+            "flags": "i"
+        },
+        {
+            "id": "XP_CMDSHELL",
+            "pattern": "(?i)\\bxp_cmdshell\\b",
+            "score": 3,
+            "flags": "i"
+        },
+        // Comment tokens (weak rule, reduce score)
+        {
+            "id": "COMMENT_TOKENS",
+            "pattern": "(?<!\\\\)(--|#|/\\*)",
+            "score": 1,
+            "flags": "i"
+        },
+        // DESC table form (avoid matching description)
+        {
+            "id": "DESC_TABLE",
+            "pattern": "(?i)\\bdesc\\s+(table|`?\\w+`?)",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: simple SELECT with FROM
+        {
+            "id": "SIMPLE_SELECT",
+            "pattern": "(?i)\\bselect\\b\\s+[^;]+\\bfrom\\b\\s+[^;]+(?:where|group|order|limit|union)",
+            "score": 2,
+            "flags": "is"
+        },
+        // Additional: OR/AND logic injections
+        {
+            "id": "OR_AND_LOGIC",
+            "pattern": "(?i)\\b(?:or|and)\\b\\s+['\"]?[^;]+['\"]?\\s*=\\s*['\"]?[^;]+['\"]?(?:\\s+or|\\s+and|\\s+union|\\s+drop|\\s+delete)",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: numeric comparison injections
+        {
+            "id": "NUMBER_COMPARISON",
+            "pattern": "(?i)\\b(?:or|and)\\b\\s+\\d+\\s*=\\s*\\d+(?:\\s+or|\\s+and|\\s+union|\\s+drop|\\s+delete)",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: string comparison injections
+        {
+            "id": "STRING_COMPARISON",
+            "pattern": "(?i)\\b(?:or|and)\\b\\s+['\"][^'\"]*['\"]\\s*=\\s*['\"][^'\"]*['\"](?:\\s+or|\\s+and|\\s+union|\\s+drop|\\s+delete)",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: EXEC/EXECUTE commands
+        {
+            "id": "EXEC_COMMANDS",
+            "pattern": "(?i)\\b(?:exec|execute)\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: stored procedures
+        {
+            "id": "STORED_PROC",
+            "pattern": "(?i)\\b(?:sp_|xp_)\\w+",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: PostgreSQL functions
+        {
+            "id": "POSTGRES_FUNCS",
+            "pattern": "(?i)\\b(?:pg_sleep|version)\\s*\\(",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: Oracle functions
+        {
+            "id": "ORACLE_FUNCS",
+            "pattern": "(?i)\\b(?:utl_http|utl_inaddr|v\\$version|banner)\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: MySQL functions
+        {
+            "id": "MYSQL_FUNCS",
+            "pattern": "(?i)\\b(?:sleep|benchmark|load_file|version)\\s*\\(",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: SQL Server functions
+        {
+            "id": "SQLSERVER_FUNCS",
+            "pattern": "(?i)\\b(?:waitfor|xp_cmdshell|sp_executesql|@@version)\\b",
+            "score": 2,
+            "flags": "i"
+        },
+        // Additional: conditional statements
+        {
+            "id": "CONDITIONAL_STMT",
+            "pattern": "(?i)\\b(?:if|case|when|then|else)\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: variable declarations
+        {
+            "id": "VARIABLE_DECL",
+            "pattern": "(?i)\\b(?:declare|set|select)\\s+@\\w+",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: hex encoding
+        {
+            "id": "HEX_ENCODED",
+            "pattern": "(?i)0x[0-9a-fA-F]+",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: string concatenation
+        {
+            "id": "STRING_CONCAT",
+            "pattern": "(?i)(?:\\+\\+|\\|\\||concat)\\s*\\(",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: subquery
+        {
+            "id": "SUBQUERY",
+            "pattern": "(?i)\\(\\s*select\\b",
+            "score": 2,
+            "flags": "is"
+        },
+        // Additional: UNION ALL
+        {
+            "id": "UNION_ALL",
+            "pattern": "(?i)\\bunion\\s+all\\b",
+            "score": 3,
+            "flags": "i"
+        },
+        // Additional: TOP/LIMIT
+        {
+            "id": "TOP_LIMIT",
+            "pattern": "(?i)\\b(?:top|limit|rownum)\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: GROUP BY/HAVING
+        {
+            "id": "GROUP_HAVING",
+            "pattern": "(?i)\\b(?:group\\s+by|having)\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: ORDER BY
+        {
+            "id": "ORDER_BY",
+            "pattern": "(?i)\\border\\s+by\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: LIKE operator
+        {
+            "id": "LIKE_OP",
+            "pattern": "(?i)\\blike\\b\\s+['\"][^'\"]*%[^'\"]*['\"]",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: BETWEEN operator
+        {
+            "id": "BETWEEN_OP",
+            "pattern": "(?i)\\bbetween\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: IS NULL/IS NOT NULL
+        {
+            "id": "IS_NULL",
+            "pattern": "(?i)\\bis\\s+(?:null|not\\s+null)\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: DISTINCT
+        {
+            "id": "DISTINCT",
+            "pattern": "(?i)\\bdistinct\\b",
+            "score": 1,
+            "flags": "i"
+        },
+        // Additional: COUNT/SUM/AVG aggregate functions
+        {
+            "id": "AGGREGATE_FUNCS",
+            "pattern": "(?i)\\b(?:count|sum|avg|max|min)\\s*\\(",
+            "score": 1,
+            "flags": "i"
+        }
+    ],
+    "xss_rules": [
+        {
+            "id": "SCRIPT_TAG",
+            "pattern": "(?is)<\\s*script\\b",
+            "score": 3,
+            "flags": "is"
+        },
+        {
+            "id": "IFRAME_TAG",
+            "pattern": "(?is)<\\s*iframe\\b",
+            "score": 2,
+            "flags": "is"
+        },
+        {
+            "id": "SVG_TAG",
+            "pattern": "(?is)<\\s*svg\\b",
+            "score": 2,
+            "flags": "is"
+        },
+        // on* event attributes in any tag
+        {
+            "id": "ON_EVENT_ATTR",
+            "pattern": "(?is)<\\w+\\b[^>]*\\s(on\\w+)\\s*=",
+            "score": 2,
+            "flags": "is"
+        },
+        // javascript: protocol
+        {
+            "id": "JS_PROTOCOL",
+            "pattern": "(?i)javascript:\\s*[^\\s]+",
+            "score": 3,
+            "flags": "i"
+        },
+        // Text-level sensitive tokens (weak rule; combine with others)
+        {
+            "id": "DOC_COOKIE",
+            "pattern": "(?i)document\\.cookie",
+            "score": 1,
+            "flags": "i"
+        },
+        {
+            "id": "WIN_LOCATION",
+            "pattern": "(?i)window\\.(location|onload)",
+            "score": 1,
+            "flags": "i"
+        }
+    ]
+}
